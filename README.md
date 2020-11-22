@@ -16,7 +16,7 @@ As this API is built using [lumen](https://lumen.laravel.com), please run the fo
  - [git](https://git-scm.com/downloads/)
 
 ```sh
-$ git clone https://scm.kitechsoftware.com/kin/microservices/web-meta-grabber.git
+$ git clone https://github.com/swayechateau/web-meta-grabber.git
 $ cd web-meta-grabber
 $ composer install
 ```
