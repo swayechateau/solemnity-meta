@@ -1,13 +1,15 @@
 Meta Grabber Api
 =======
 
+Rebuilt in Go
+
 Meta Grabber gets meta data from a website for creating sharable cards.
 
 
 Installation
 ---------------
 
-Meta Grabber requires `PHP` v7.2+ to run.
+Meta Grabber requires --`PHP` v7.2+-- to run.
 
 As this API is built using [lumen](https://lumen.laravel.com), please run the following command to install.
 
