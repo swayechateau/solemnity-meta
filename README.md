@@ -55,7 +55,7 @@ curl http://localhost:8080/?link=https://www.youtube.com/watch?v=jgbVa274m9k&all
 And a POST Request
 
 ```sh
-curl -X POST -d 'link=facbook.com' -d 'all=true' http://localhost:8080/
+curl -X POST -d 'link=facebook.com' -d 'all=true' http://localhost:8080/
 ```
 
 ### Api Response Examples
