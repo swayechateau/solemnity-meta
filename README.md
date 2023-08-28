@@ -44,18 +44,19 @@ The follow fileds are supported.
 | ----- | ---- | -------- | ------- |
 | link | String | Yes | null |
 | all | Boolean | No | false |
+| schema | String | No | https |
 
 
 For instance a GET Request
 
 ```sh
-curl http://localhost:8080/?link=https://www.youtube.com/watch?v=jgbVa274m9k&all=true
+curl http://localhost:8080/api?link=https://www.youtube.com/watch?v=jgbVa274m9k&all=true
 ```
 
 And a POST Request
 
 ```sh
-curl -X POST -d 'link=facebook.com' -d 'all=true' http://localhost:8080/
+curl -X POST -d 'link=facebook.com' -d 'all=true' http://localhost:8080/api
 ```
 
 ### Api Response Examples
