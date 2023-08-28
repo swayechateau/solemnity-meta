@@ -1,4 +1,4 @@
-Meta Grabber Api
+Solemnity Meta Api
 =======
 
 Rebuilt in Go
@@ -9,23 +9,27 @@ Meta Grabber gets meta data from a website for creating sharable cards.
 Installation
 ---------------
 
-Meta Grabber requires --`PHP` v7.2+-- to run.
+Meta Grabber requires --`Go` v1.2+-- to run.
 
-As this API is built using [lumen](https://lumen.laravel.com), please run the following command to install.
+As this API is built using [go](https://go.dev), please run the following command to install.
 
 ### Required Before Install
- - [composer](https://getcomposer.org/)
+
+ - [go](https://go.dev)
  - [git](https://git-scm.com/downloads/)
 
 ```sh
-$ git clone https://github.com/swayechateau/web-meta-grabber.git
-$ cd web-meta-grabber
-$ composer install
+$ git clone https://github.com/swayechateau/solemnity-meta.git
+$ cd solemnity-meta
+$ go mod download
 ```
+
 Development 
+
 ```sh
-$ php -S localhost:8000 -t public
+$ go run main.go
 ```
+
 Production 
 Either host on a php support server or use docker `will add instruction later`
 
@@ -43,17 +47,21 @@ The follow fileds are supported.
 
 
 For instance a GET Request
+
 ```sh
-curl http://localhost:8000/meta?link=https://www.youtube.com/watch?v=jgbVa274m9k&all=true
+curl http://localhost:8000/?link=https://www.youtube.com/watch?v=jgbVa274m9k&all=true
 ```
+
 And a POST Request
+
 ```sh
-curl -X POST -d 'link=facbook.com' -d 'all=true' http://localhost:8000/meta
+curl -X POST -d 'link=facbook.com' -d 'all=true' http://localhost:8080/
 ```
 
 ### Api Response Examples
 
 Full
+
 ``` json
 {
     "title":"Facebook \u2013 log in or sign up",
@@ -69,7 +77,9 @@ Full
     }
 }
 ```
+
 Short
+
 ``` json
 {
     "title":"Facebook \u2013 log in or sign up",
