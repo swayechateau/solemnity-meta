@@ -6,9 +6,10 @@ import (
 )
 
 func main() {
+	
+	http.HandleFunc("/", metaHandler)
 	// Serve static files from the "public" directory
 	fs := http.FileServer(http.Dir("public"))
-	http.HandleFunc("/", metaHandler)
 	http.Handle("/docs/", http.StripPrefix("/docs/", fs))
 
 	port := "8080"
