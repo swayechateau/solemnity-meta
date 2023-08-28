@@ -31,7 +31,7 @@ $ go run main.go
 ```
 
 Production 
-Either host on a php support server or use docker `will add instruction later`
+Either host on a server with go support or use one with docker support `will add instruction later`
 
 How it works
 ------------------
@@ -49,7 +49,7 @@ The follow fileds are supported.
 For instance a GET Request
 
 ```sh
-curl http://localhost:8000/?link=https://www.youtube.com/watch?v=jgbVa274m9k&all=true
+curl http://localhost:8080/?link=https://www.youtube.com/watch?v=jgbVa274m9k&all=true
 ```
 
 And a POST Request
