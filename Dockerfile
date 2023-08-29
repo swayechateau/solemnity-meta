@@ -1,5 +1,5 @@
 # Use the official Go image as the base image
-FROM golang:latest AS build
+FROM golang:1.21 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -14,16 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go application
-RUN go build -o app
-
-# Use a minimal base image for the final container
-FROM alpine:latest
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the binary built in the previous stage to this stage
-COPY --from=build /app/app .
+RUN go build -o /app/app
 
 # Expose the port your Go application is listening on
 EXPOSE 8080
