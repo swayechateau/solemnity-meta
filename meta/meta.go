@@ -66,3 +66,20 @@ func GetMetaResponse(content string, all bool) MetaResponse {
 
 	return response
 }
+
+
+func FilterByName(metaSlice []Meta, requestedName string) []Meta {
+	var filteredMeta []Meta
+
+	for _, meta := range metaSlice {
+		if meta.Name == requestedName {
+			filteredMeta = append(filteredMeta, meta)
+		}
+	}
+
+	return filteredMeta
+}
+
+func SplitKeywords(keywords string) []string {
+	return strings.Split(keywords, ", ")
+}
