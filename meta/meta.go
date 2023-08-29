@@ -13,6 +13,8 @@ type Meta struct {
 type MetaImage struct {
 	Url     string `json:"uri,omitempty"`
 	AltText string `json:"alt_text,omitempty"`
+	Width   string `json:"width,omitempty"`
+	Height  string `json:"height,omitempty"`
 }
 
 type MetaVideo struct {
@@ -36,14 +38,6 @@ type MetaResponse struct {
 
 	All []Meta `json:"all,omitempty"`
 }
-
-// func (*Meta) getImage() MetaImage{
-
-// }
-
-// func (*Meta) getVideo() MetaVideo{
-
-// }
 
 func ExtractMeta(content string) []Meta {
 	var metaData []Meta
@@ -71,8 +65,6 @@ func GetMetaResponse(content string, all bool) MetaResponse {
 		response.All = metaData
 	}
 
-	response.Keywords = Keywords(metaData)
-
 	for _, meta := range metaData {
 		switch meta.Name {
 		case "keywords":
@@ -97,6 +89,10 @@ func GetMetaResponse(content string, all bool) MetaResponse {
 			response.Image.Url = meta.Content
 		case "twitter:image:alt":
 			response.Image.AltText = meta.Content
+		case "twitter:image:width":
+			response.Image.Width = meta.Content
+		case "twitter:image:height":
+			response.Image.Height = meta.Content
 		case "og:video:url":
 			fallthrough
 		case "og:video:secure_url":
@@ -115,13 +111,8 @@ func GetMetaResponse(content string, all bool) MetaResponse {
 	return response
 }
 
-func Keywords(metaSlice []Meta) []string {
-	keywords := FilterByName(metaSlice, "keywords")
-	if keywords.Content != "" {
-		return SplitKeywords(keywords.Content)
-	}
-
-	return nil
+func SplitKeywords(keywords string) []string {
+	return strings.Split(keywords, ", ")
 }
 
 func FilterByName(metaSlice []Meta, requestedName string) Meta {
@@ -146,8 +137,4 @@ func FilterByNameSlice(metaSlice []Meta, requestedName string) []Meta {
 	}
 
 	return filteredMeta
-}
-
-func SplitKeywords(keywords string) []string {
-	return strings.Split(keywords, ", ")
 }
