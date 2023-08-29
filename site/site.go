@@ -54,7 +54,7 @@ func (s *Site) FetchContent() error {
 		// update https to https
 	}
 
-	resp, err := http.Get(link)
+	resp, err := http.Get(s.Url)
 	if err != nil {
 		return err
 	}
