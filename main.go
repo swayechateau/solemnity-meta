@@ -15,7 +15,7 @@ type ResponseData struct {
 	LinkValid bool       `json:"linkValid"`
 	All       string     `json:"all"`
 	Content   string     `json:"content,omitempty"`
-	Metadata  []MetaData `json:"metadata,omitempty"`
+	Metadata  []MetaData `json:"meta_data,omitempty"`
 }
 
 type MetaData struct {
@@ -151,15 +151,15 @@ func extractMetaData(content string) []MetaData {
 	var metaData []MetaData
 
 	// Use regular expression to match meta tags
-	metaTagPattern := `<meta\s+(?:name|property)="([^"]+)"\s+content="([^"]+)"[^>]*>`
+	metaTagPattern := `<meta\s+(?:(?:name|property|rel|itemprop)="([^"]+)")\s+content="([^"]+)"[^>]*>`
 	re := regexp.MustCompile(metaTagPattern)
 	matches := re.FindAllStringSubmatch(content, -1)
 
 	// Process matched meta tags
 	for _, match := range matches {
-		nameOrProperty := match[1]
+		attrName := match[1]
 		content := match[2]
-		metaData = append(metaData, MetaData{Name: nameOrProperty, Content: content})
+		metaData = append(metaData, MetaData{Name: attrName, Content: content})
 	}
 
 	return metaData
