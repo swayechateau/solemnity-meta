@@ -1,5 +1,5 @@
 # Use the official Go image as the base image
-FROM golang:1.21 AS build
+FROM golang:latest AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -16,8 +16,12 @@ COPY . .
 # Build the Go application
 RUN go build -o /app/app
 
+FROM alpine:latest
+
+COPY --from=build ["/app/app", "/"]
+
 # Expose the port your Go application is listening on
 EXPOSE 8080
 
 # Command to run the Go application
-CMD ["./app"]
+CMD ["/app"]
