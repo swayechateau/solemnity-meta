@@ -16,12 +16,12 @@ COPY . .
 # Build the Go application
 RUN go build -o /app/app
 
-FROM alpine:latest
+# FROM alpine:latest
 
-COPY --from=build ["/app/app", "/"]
+# COPY --from=build ["/app/app", "/"]
 
 # Expose the port your Go application is listening on
 EXPOSE 8080
 
 # Command to run the Go application
-CMD ["/app"]
+CMD ["./app"]
