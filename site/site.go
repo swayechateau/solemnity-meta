@@ -12,6 +12,41 @@ type Site struct {
 	Content string
 }
 
+func (s *Site) IsValidUrl() bool {
+	prefix := prefix(s.Secure)
+	if s.Url == "" {
+		return false
+	}
+
+	if !strings.Contains(s.Url, "://") {
+		s.Url = prefix + s.Url
+		return true
+	}
+
+	if !IsUrlSupported(s.Url) {
+		return false
+	}
+
+	if strings.HasPrefix(s.Url, "http://") && s.Secure {
+		s.Url = ToHttps(s.Url)
+		return true
+	}
+
+	if strings.HasPrefix(s.Url, "https://") && !s.Secure {
+		s.Url = ToHttp(s.Url)
+		return true
+	}
+
+	return false
+}
+
+func prefix(secure bool) string {
+	if secure {
+		return "https://"
+	}
+	return "http://"
+}
+
 func ToHttps(input string) string {
 	if strings.HasPrefix(input, "http://") {
 		return "https://" + input[len("http://"):]
@@ -26,34 +61,11 @@ func ToHttp(input string) string {
 	return input
 }
 
-func IsValid(link string) bool {
+func IsUrlSupported(link string) bool {
 	return strings.HasPrefix(link, "https://") || strings.HasPrefix(link, "http://")
 }
 
-func FetchSite(link string) (string, error) {
-	resp, err := http.Get(link)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(body), nil
-}
-
 func (s *Site) FetchContent() error {
-	// check url
-	if IsValid(s.Url) {
-	}
-	// check secure
-	if !s.Secure {
-		// update https to https
-	}
-
 	resp, err := http.Get(s.Url)
 	if err != nil {
 		return err

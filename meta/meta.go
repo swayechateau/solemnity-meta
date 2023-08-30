@@ -89,9 +89,9 @@ func GetMetaResponse(content string, all bool) MetaResponse {
 			response.Image.Url = meta.Content
 		case "twitter:image:alt":
 			response.Image.AltText = meta.Content
-		case "twitter:image:width":
+		case "og:image:width":
 			response.Image.Width = meta.Content
-		case "twitter:image:height":
+		case "og:image:height":
 			response.Image.Height = meta.Content
 		case "og:video:url":
 			fallthrough

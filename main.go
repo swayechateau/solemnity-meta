@@ -47,12 +47,11 @@ func metaHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	linkValid := site.IsValid(website.Url)
+	linkValid := website.IsValidUrl()
 	var metaData meta.MetaResponse
 
 	if linkValid {
-		var err error
-		err = website.FetchContent()
+		err := website.FetchContent()
 		if err != nil {
 			http.Error(w, "Error fetching website content", http.StatusInternalServerError)
 			log.Printf("Error fetching website content: %v", err)

@@ -14,7 +14,9 @@ short json (all is false)
     "keywords":[],
     "image" : {
 		"url": "",
-		"alt_text":""
+		"alt_text":"",
+        "height":"",
+		"width":""
 	},
 	"video" : {
 		"url": "",
