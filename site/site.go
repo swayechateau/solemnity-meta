@@ -37,6 +37,10 @@ func (s *Site) IsValidUrl() bool {
 		return true
 	}
 
+	if strings.HasPrefix(s.Url, "https://") && s.Secure || strings.HasPrefix(s.Url, "http://") && !s.Secure {
+		return true
+	}
+
 	return false
 }
 
@@ -66,10 +70,20 @@ func IsUrlSupported(link string) bool {
 }
 
 func (s *Site) FetchContent() error {
-	resp, err := http.Get(s.Url)
+	client := &http.Client{}
+
+	req, err := http.NewRequest("GET", s.Url, nil)
 	if err != nil {
 		return err
 	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
