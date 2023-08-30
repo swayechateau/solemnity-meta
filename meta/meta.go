@@ -6,37 +6,37 @@ import (
 )
 
 type Meta struct {
-	Name    string `json:"name"`
-	Content string `json:"content"`
+	Name    string `json:"name" xml:"name,attr"`
+	Content string `json:"content" xml:"content,attr"`
 }
 
 type MetaImage struct {
-	Url     string `json:"uri,omitempty"`
-	AltText string `json:"alt_text,omitempty"`
-	Width   string `json:"width,omitempty"`
-	Height  string `json:"height,omitempty"`
+	Url     string `json:"uri,omitempty" xml:"imageUri,attr,omitempty"`
+	AltText string `json:"alt_text,omitempty" xml:"imageAltText,attr,omitempty"`
+	Width   string `json:"width,omitempty" xml:"imageWidth,attr,omitempty"`
+	Height  string `json:"height,omitempty" xml:"imageHeight,attr,omitempty"`
 }
 
 type MetaVideo struct {
-	Url    string   `json:"uri,omitempty"`
-	Type   string   `json:"type,omitempty"`
-	Width  string   `json:"width,omitempty"`
-	Height string   `json:"height,omitempty"`
-	Tags   []string `json:"tags,omitempty"`
+	Url    string   `json:"uri,omitempty" xml:"videoUri,attr,omitempty"`
+	Type   string   `json:"type,omitempty" xml:"videoType,attr,omitempty"`
+	Width  string   `json:"width,omitempty" xml:"videoWidth,attr,omitempty"`
+	Height string   `json:"height,omitempty" xml:"videoHeight,attr,omitempty"`
+	Tags   []string `json:"tags,omitempty" xml:"videoTags,attr,omitempty"`
 }
 
 type MetaResponse struct {
-	SiteName    string    `json:"site_name,omitempty"`
-	Locale      string    `json:"locale,omitempty"`
-	Url         string    `json:"url,omitempty"`
-	Title       string    `json:"title,omitempty"`
-	Type        string    `json:"type,omitempty"`
-	Description string    `json:"description,omitempty"`
-	Keywords    []string  `json:"keywords,omitempty"`
-	Image       MetaImage `json:"image,omitempty"`
-	Video       MetaVideo `json:"video,omitempty"`
+	SiteName    string    `json:"site_name,omitempty" xml:"siteName,attr,omitempty"`
+	Locale      string    `json:"locale,omitempty" xml:"locale,attr,omitempty"`
+	Url         string    `json:"url,omitempty" xml:"url,attr,omitempty"`
+	Title       string    `json:"title,omitempty" xml:"title,attr,omitempty"`
+	Type        string    `json:"type,omitempty" xml:"type,attr,omitempty"`
+	Description string    `json:"description,omitempty" xml:"description,attr,omitempty"`
+	Keywords    []string  `json:"keywords,omitempty" xml:"keywords,attr,omitempty"`
+	Image       MetaImage `json:"image,omitempty" xml:"image,attr,omitempty"`
+	Video       MetaVideo `json:"video,omitempty" xml:"video,attr,omitempty"`
 
-	All []Meta `json:"all,omitempty"`
+	All []Meta `json:"all,omitempty" xml:"all,attr,omitempty"`
 }
 
 func ExtractMeta(content string) []Meta {

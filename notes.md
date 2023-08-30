@@ -59,9 +59,11 @@ long json (all is true)
 }
 ```
 
+Added user agent support - google bot was the only one working across all test cases
+
 Add github project image 1280×640px for best display
 Add xml support as a return type
-Add a user agent 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0'
 
 Issues
-twitter.com - errors wih redirect exceeding 10 
+twitter.com - errors wih redirect exceeding 10 - fixed with user agent
+twitter.com content not being converted

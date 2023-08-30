@@ -11,11 +11,11 @@ import (
 )
 
 type ResponseData struct {
-	Link      string            `json:"link"`
-	LinkValid bool              `json:"linkValid"`
-	All       bool              `json:"all"`
-	Content   string            `json:"content,omitempty"`
-	Meta      meta.MetaResponse `json:"meta,omitempty"`
+	Link      string            `json:"link" validate:"required,url" example:"https://www.example.com" xml:"link"`
+	LinkValid bool              `json:"linkValid" xml:"linkValid"`
+	All       bool              `json:"all" xml:"displayAll"`
+	Content   string            `json:"content,omitempty" xml:"content,omitempty"`
+	Meta      meta.MetaResponse `json:"meta,omitempty" xml:"meta,omitempty"`
 }
 
 func main() {
@@ -64,6 +64,7 @@ func metaHandler(w http.ResponseWriter, r *http.Request) {
 		Link:      website.Url,
 		LinkValid: linkValid,
 		All:       all,
+		Content:   website.Content,
 		Meta:      metaData,
 	}
 

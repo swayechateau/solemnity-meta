@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"log"
 )
 
 type Site struct {
@@ -77,7 +78,8 @@ func (s *Site) FetchContent() error {
 		return err
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0")
+	// Google bot was the only agent i got working with twitter - tough times
+	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://google.com/bot.html)")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -91,5 +93,7 @@ func (s *Site) FetchContent() error {
 		return err
 	}
 	s.Content = string(body)
+	log.Printf("Fetched content from %s", s.Url)
+	log.Printf("Content: %s", s.Content)
 	return nil
 }
