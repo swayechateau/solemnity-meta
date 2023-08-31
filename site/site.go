@@ -79,7 +79,7 @@ func (s *Site) FetchContent() error {
 	}
 
 	// Google bot was the only agent i got working with twitter - tough times
-	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://google.com/bot.html)")
+	req.Header.Set("User-Agent", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/W.X.Y.Z Safari/537.36")
 
 	resp, err := client.Do(req)
 	if err != nil {
