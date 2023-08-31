@@ -1,13 +1,14 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"meta/meta"
 	"meta/site"
 	"net/http"
 	"strings"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type ResponseData struct {
@@ -19,66 +20,43 @@ type ResponseData struct {
 }
 
 func main() {
-	http.HandleFunc("/api", metaHandler)
-	// Serve static files from the "public" directory
-	fs := http.FileServer(http.Dir("public"))
-	http.Handle("/", http.StripPrefix("/", fs))
-
-	port := "8080"
-	fmt.Printf("Server is running on port %s...\n", port)
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-	}
+	e := echo.New()
+	e.Use(middleware.Static("public"))
+	e.GET("/api", getMeta)
+	e.Start(":8080")
 }
 
-func metaHandler(w http.ResponseWriter, r *http.Request) {
+func getMeta(c echo.Context) error {
 	website := site.Site{
 		// set site url as https (Default: true)
-		Secure: isFalse(r.URL.Query().Get("secure")),
+		Secure: isFalse(c.QueryParam("secure")),
 		// website url to grab meta data from
-		Url: r.URL.Query().Get("link"),
+		Url: c.QueryParam("link"),
 	}
-	// list all meta not just concise list (Default: false)
-	all := isTrue(r.URL.Query().Get("all"))
+	all := isTrue(c.QueryParam("all"))
 
 	if website.Url == "" {
-		http.Error(w, "Missing required 'link' parameter", http.StatusBadRequest)
-		return
+		return c.String(http.StatusBadRequest, "Missing required 'link' parameter")
 	}
-
 	linkValid := website.IsValidUrl()
-	var metaData meta.MetaResponse
 
 	if linkValid {
 		err := website.FetchContent()
 		if err != nil {
-			http.Error(w, "Error fetching website content", http.StatusInternalServerError)
 			log.Printf("Error fetching website content: %v", err)
-			return
+			return c.String(http.StatusInternalServerError, "Error fetching website content")
 		}
-		metaData = meta.GetMetaResponse(website.Content, all)
 	}
+
+	metaTags, _ := meta.GetMetaResponse(website.Content, all)
 
 	responseData := ResponseData{
 		Link:      website.Url,
 		LinkValid: linkValid,
 		All:       all,
-		Meta:      metaData,
+		Meta:      metaTags,
 	}
-
-	responseJSON, err := json.Marshal(responseData)
-	if err != nil {
-		http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
-		log.Printf("Error encoding JSON response: %v", err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(responseJSON)
-
-	log.Printf("Response: %s", responseData)
+	return c.JSON(http.StatusOK, responseData)
 }
 
 func isFalse(boolean string) bool {

@@ -1,8 +1,10 @@
 package meta
 
 import (
-	"regexp"
+	"log"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 type Meta struct {
@@ -39,33 +41,19 @@ type MetaResponse struct {
 	All []Meta `json:"all,omitempty"`
 }
 
-func ExtractMeta(content string) []Meta {
-	var metaData []Meta
-
-	// Use regular expression to match meta tags
-	metaTagPattern := `<meta\s+(?:(?:name|property|rel|itemprop)="([^"]+)")\s+content="([^"]+)"[^>]*>`
-	re := regexp.MustCompile(metaTagPattern)
-	matches := re.FindAllStringSubmatch(content, -1)
-
-	// Process matched meta tags
-	for _, match := range matches {
-		attrName := match[1]
-		content := match[2]
-		metaData = append(metaData, Meta{Name: attrName, Content: content})
-	}
-
-	return metaData
-}
-
-func GetMetaResponse(content string, all bool) MetaResponse {
+func GetMetaResponse(content string, all bool) (MetaResponse, error) {
 	var response MetaResponse
+	metaTags, err := ExtractMeta(content)
 
-	metaData := ExtractMeta(content)
-	if all {
-		response.All = metaData
+	if err != nil {
+		return response, err
 	}
 
-	for _, meta := range metaData {
+	if all {
+		response.All = metaTags
+	}
+
+	for _, meta := range metaTags {
 		switch meta.Name {
 		case "keywords":
 			response.Keywords = SplitKeywords(meta.Content)
@@ -108,7 +96,30 @@ func GetMetaResponse(content string, all bool) MetaResponse {
 		}
 	}
 
-	return response
+	return response, nil
+}
+
+func ExtractMeta(content string) ([]Meta, error) {
+	var metaTags []Meta
+	log.Printf("Extracting website content from: %v", content)
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+	if err != nil {
+		return metaTags, err
+	}
+
+	doc.Find("meta").Each(func(index int, metaTag *goquery.Selection) {
+		name, _ := metaTag.Attr("name")
+		property, _ := metaTag.Attr("property")
+		rel, _ := metaTag.Attr("rel")
+		itemprop, _ := metaTag.Attr("itemprop")
+		content, _ := metaTag.Attr("content")
+
+		if name != "" || property != "" {
+			metaTags = append(metaTags, Meta{Name: name + property + rel + itemprop, Content: content})
+		}
+	})
+
+	return metaTags, nil
 }
 
 func SplitKeywords(keywords string) []string {
