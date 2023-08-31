@@ -21,6 +21,14 @@ type ResponseData struct {
 
 func main() {
 	e := echo.New()
+	// Middleware to set Access-Control-Allow-Origin header
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+			return next(c)
+		}
+	})
+	
 	e.Use(middleware.Static("public"))
 	e.GET("/api", getMeta)
 	e.Start(":8080")
