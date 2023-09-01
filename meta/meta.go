@@ -3,8 +3,6 @@ package meta
 import (
 	"log"
 	"strings"
-
-	"github.com/PuerkitoBio/goquery"
 )
 
 type Meta struct {
@@ -102,12 +100,12 @@ func GetMetaResponse(content string, all bool) (MetaResponse, error) {
 func ExtractMeta(content string) ([]Meta, error) {
 	var metaTags []Meta
 	log.Printf("Extracting website content from: %v", content)
-	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+	doc, err := NewDocumentFromReader(strings.NewReader(content))
 	if err != nil {
 		return metaTags, err
 	}
 
-	doc.Find("meta").Each(func(index int, metaTag *goquery.Selection) {
+	doc.Find("meta").Each(func(index int, metaTag *Selection) {
 		name, _ := metaTag.Attr("name")
 		property, _ := metaTag.Attr("property")
 		rel, _ := metaTag.Attr("rel")
@@ -124,28 +122,4 @@ func ExtractMeta(content string) ([]Meta, error) {
 
 func SplitKeywords(keywords string) []string {
 	return strings.Split(keywords, ", ")
-}
-
-func FilterByName(metaSlice []Meta, requestedName string) Meta {
-	var filteredMeta Meta
-
-	for _, meta := range metaSlice {
-		if meta.Name == requestedName {
-			filteredMeta = meta
-		}
-	}
-
-	return filteredMeta
-}
-
-func FilterByNameSlice(metaSlice []Meta, requestedName string) []Meta {
-	var filteredMeta []Meta
-
-	for _, meta := range metaSlice {
-		if meta.Name == requestedName {
-			filteredMeta = append(filteredMeta, meta)
-		}
-	}
-
-	return filteredMeta
 }
