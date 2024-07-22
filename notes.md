@@ -67,3 +67,5 @@ Add xml support as a return type
 Issues
 twitter.com - errors wih redirect exceeding 10 - fixed with user agent
 twitter.com content not being converted
+
+Added docker-compose, changed dockerfile and moved go code to app directory

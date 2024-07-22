@@ -1,31 +1,31 @@
-# Use the official Go image as the base image
-FROM golang:latest AS build-stage
+# Use the official Golang image as a base image
+FROM golang:latest AS builder
 
-# Set the working directory inside the container
+# Set the Current Working Directory inside the container
 WORKDIR /app
 
-COPY go.mod go.sum ./
-RUN go mod download
+# Copy the source from the current directory to the Working Directory inside the container
+COPY ./app/. .
 
-# Copy the rest of the application code to the container
-COPY . .
+# Build the Go app
+ENV CGO_ENABLED=0
+RUN go build -o meta .
 
-# Build the Go application
-RUN CGO_ENABLED=0 GOOS=linux go build -o /solemnity-meta
+# Start a new stage from scratch
+FROM alpine:latest
 
-# Run the tests in the container
-FROM build-stage AS run-test-stage
-RUN go test -v ./...
+# Set the Current Working Directory inside the container
+WORKDIR /app
 
-FROM alpine:latest AS build-release-stage
+# Copy the Pre-built binary file from the previous stage
+COPY --from=builder /app/meta .
+COPY --from=builder /app/public ./public
 
-COPY --from=build-stage /solemnity-meta /solemnity-meta
 
-WORKDIR /
-
-# Expose the port your Go application is listening on
+# Expose port 5050 to the outside world
 EXPOSE 8080
 
 USER 1000:1000
 
-ENTRYPOINT ["/solemnity-meta"]
+# Command to run the executable
+CMD ["./meta"]
