@@ -3,12 +3,15 @@ Solemnity Meta Api
 
 Solemnity Meta gets meta data from a website for creating sharable cards.
 
-*Note.* Since Elon has bought twitter, the meta.solemnity.icu is unable to fetch any data from the now called X platform. I apologise for any inconvience.
+![Meta](/meta_mascot.webp)
+Meet Meta from the solemnity family
+
+*Note.* Meta is a distinguished owl.. who probably wears oxfords!
 
 Installation
 ---------------
 
-Meta Grabber requires --`Go` v1.2+-- to run.
+Meta Grabber requires `Go v1.2+` to run.
 
 As this API is built using [go](https://go.dev), please run the following command to install.
 
