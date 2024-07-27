@@ -28,10 +28,10 @@ func main() {
 			return next(c)
 		}
 	})
-	
+
 	e.Use(middleware.Static("public"))
 	e.GET("/api", getMeta)
-	e.Start(":8080")
+	e.Start(":5050")
 }
 
 func getMeta(c echo.Context) error {

@@ -23,7 +23,7 @@ COPY --from=builder /app/public ./public
 
 
 # Expose port 5050 to the outside world
-EXPOSE 8080
+EXPOSE 5050
 
 USER 1000:1000
 
