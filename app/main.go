@@ -20,6 +20,16 @@ type ResponseData struct {
 	Meta      meta.MetaResponse `json:"meta,omitempty" xml:"meta,omitempty"`
 }
 
+type ResponseError struct {
+	Error string `json:"error" xml:"error"`
+}
+
+type RequestData struct {
+	Link   string `json:"link" validate:"required,url" example:"https://www.example.com" xml:"link" form:"link"`
+	Secure bool   `json:"secure" xml:"secure" form:"secure"`
+	All    bool   `json:"all" xml:"displayAll" form:"all"`
+}
+
 func main() {
 	e := echo.New()
 	// Middleware to set Access-Control-Allow-Origin header
@@ -38,13 +48,17 @@ func main() {
 }
 
 func getMetaHandler(c echo.Context) error {
+	r := new(RequestData)
+	if err := c.Bind(r); err != nil {
+		return c.JSON(http.StatusBadRequest, ResponseError{Error: err.Error()})
+	}
 	website := site.Site{
 		// set site url as https (Default: true)
-		Secure: isFalse(c.QueryParam("secure")),
+		Secure: r.Secure,
 		// website url to grab meta data from
-		Url: c.QueryParam("link"),
+		Url: r.Link,
 	}
-	all := isTrue(c.QueryParam("all"))
+	all := r.All
 
 	responseData, err := getMeta(website, all)
 	if err != nil {
@@ -54,17 +68,22 @@ func getMetaHandler(c echo.Context) error {
 }
 
 func postMetaHandler(c echo.Context) error {
+	r := new(RequestData)
+	if err := c.Bind(r); err != nil {
+		return c.JSON(http.StatusBadRequest, ResponseError{Error: err.Error()})
+	}
 	website := site.Site{
 		// set site url as https (Default: true)
-		Secure: isFalse(c.FormValue("secure")),
+		Secure: r.Secure,
 		// website url to grab meta data from
-		Url: c.FormValue("link"),
+		Url: r.Link,
 	}
-	all := isTrue(c.FormValue("all"))
+	all := r.All
 
 	responseData, err := getMeta(website, all)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		c.Logger().Error(err)
+		return c.JSON(http.StatusInternalServerError, ResponseError{Error: err.Error()})
 	}
 	return c.JSON(http.StatusOK, responseData)
 }
